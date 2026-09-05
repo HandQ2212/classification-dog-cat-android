@@ -39,6 +39,12 @@ class MainActivity : AppCompatActivity() {
             loadImageAndClassify(uri)
         }
 
+    private val takePhotoLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
+            bitmap ?: return@registerForActivityResult
+            loadBitmapAndClassify(bitmap)
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -73,6 +79,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnChooseImage.setOnClickListener {
             pickImageLauncher.launch("image/*")
+        }
+        
+        binding.btnTakePhoto.setOnClickListener {
+            takePhotoLauncher.launch(null)
         }
     }
 
@@ -112,6 +122,28 @@ class MainActivity : AppCompatActivity() {
                 currentBitmap?.recycle()
                 currentBitmap = bitmap
                 binding.imageViewPet.setImageBitmap(bitmap)
+                clearResult()
+                classifyCurrentBitmap()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e(TAG, "Đọc ảnh thất bại", e)
+                showError(getString(R.string.error_read_image_detail, e.messageOrClass()))
+            } finally {
+                showBusy(false)
+            }
+        }
+    }
+
+    private fun loadBitmapAndClassify(bitmap: Bitmap) {
+        pendingJob?.cancel()
+        pendingJob = lifecycleScope.launch {
+            showBusy(true, getString(R.string.status_reading_image))
+            try {
+                val softwareBitmap = withContext(Dispatchers.IO) { bitmap.toArgb8888() }
+                currentBitmap?.recycle()
+                currentBitmap = softwareBitmap
+                binding.imageViewPet.setImageBitmap(softwareBitmap)
                 clearResult()
                 classifyCurrentBitmap()
             } catch (e: CancellationException) {
@@ -181,6 +213,7 @@ class MainActivity : AppCompatActivity() {
     private fun showBusy(busy: Boolean, message: String? = null) {
         binding.progressLoading.visibility = if (busy) View.VISIBLE else View.GONE
         binding.btnChooseImage.isEnabled = !busy
+        binding.btnTakePhoto.isEnabled = !busy
         binding.dropdownModel.isEnabled = !busy
         if (message != null) showStatus(message)
     }

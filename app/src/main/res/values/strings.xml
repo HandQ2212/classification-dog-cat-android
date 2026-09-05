@@ -3,6 +3,7 @@
 
     <string name="hint_choose_model">Chọn model AI</string>
     <string name="action_upload_image">Tải hình ảnh lên</string>
+    <string name="action_take_photo">Chụp ảnh</string>
     <string name="desc_selected_image">Ảnh thú nuôi đã chọn</string>
     <string name="title_result">Kết quả nhận diện</string>
 

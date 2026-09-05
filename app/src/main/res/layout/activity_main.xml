@@ -30,13 +30,31 @@
                 tools:ignore="LabelFor" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnChooseImage"
+        <LinearLayout
+            android:id="@+id/actionButtonsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/action_upload_image"
-            app:layout_constraintTop_toBottomOf="@id/menuModel" />
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/menuModel">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnTakePhoto"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="@string/action_take_photo" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnChooseImage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="@string/action_upload_image" />
+        </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardImage"
@@ -48,7 +66,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnChooseImage">
+            app:layout_constraintTop_toBottomOf="@id/actionButtonsLayout">
 
             <ImageView
                 android:id="@+id/imageViewPet"
