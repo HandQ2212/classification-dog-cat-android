@@ -1,0 +1,18 @@
+{
+  "task": "binary_classification",
+  "custom_model_tflite": "pet_classifier_custom.tflite",
+  "mobilenet_model_tflite": "pet_classifier_mobilenet.tflite",
+  "img_size": [
+    224,
+    224
+  ],
+  "idx_to_label": {
+    "0": "Cat",
+    "1": "Dog"
+  },
+  "labels": [
+    "Cat",
+    "Dog"
+  ],
+  "num_classes": 2
+}

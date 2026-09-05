@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Pet Classification</string>
+
+    <string name="hint_choose_model">Chọn model AI</string>
+    <string name="action_upload_image">Tải hình ảnh lên</string>
+    <string name="desc_selected_image">Ảnh thú nuôi đã chọn</string>
+    <string name="title_result">Kết quả nhận diện</string>
+
+    <string name="label_species">Loài:</string>
+    <string name="label_confidence">Độ tin cậy:</string>
+    <string name="label_processing_time">Thời gian xử lý:</string>
+    <string name="label_top_predictions">Top dự đoán</string>
+
+    <string name="placeholder">-</string>
+    <string name="placeholder_percent">0%</string>
+    <string name="placeholder_ms">- ms</string>
+
+    <string name="status_loading_model">Đang tải model…</string>
+    <string name="status_pick_image">Hãy chọn một ảnh chó hoặc mèo để bắt đầu</string>
+    <string name="status_reading_image">Đang đọc ảnh…</string>
+    <string name="status_classifying">Đang nhận diện…</string>
+
+    <string name="error_load_model">Không tải được model: %1$s</string>
+    <string name="error_read_image">Không đọc được ảnh đã chọn</string>
+    <string name="error_read_image_detail">Không đọc được ảnh: %1$s</string>
+    <string name="error_classify">Nhận diện thất bại: %1$s</string>
+    <string name="warning_low_confidence">Độ tin cậy thấp — ảnh có thể không phải chó/mèo</string>
+
+    <string name="format_percent">%1$d%%</string>
+    <string name="format_ms">%1$d ms</string>
+    <string name="format_top_item">%1$d. %2$s — %3$.1f%%</string>
+</resources>
