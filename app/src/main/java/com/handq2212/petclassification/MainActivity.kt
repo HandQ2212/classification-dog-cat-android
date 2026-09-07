@@ -39,10 +39,13 @@ class MainActivity : AppCompatActivity() {
             loadImageAndClassify(uri)
         }
 
+    private var currentPhotoUri: Uri? = null
+
     private val takePhotoLauncher =
-        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
-            bitmap ?: return@registerForActivityResult
-            loadBitmapAndClassify(bitmap)
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+            if (isSuccess) {
+                currentPhotoUri?.let { loadImageAndClassify(it) }
+            }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +85,17 @@ class MainActivity : AppCompatActivity() {
         }
         
         binding.btnTakePhoto.setOnClickListener {
-            takePhotoLauncher.launch(null)
+            val file = java.io.File.createTempFile("photo_", ".jpg", cacheDir).apply {
+                createNewFile()
+                deleteOnExit()
+            }
+            val uri = androidx.core.content.FileProvider.getUriForFile(
+                this,
+                "${packageName}.fileprovider",
+                file
+            )
+            currentPhotoUri = uri
+            takePhotoLauncher.launch(uri)
         }
     }
 
@@ -135,27 +148,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadBitmapAndClassify(bitmap: Bitmap) {
-        pendingJob?.cancel()
-        pendingJob = lifecycleScope.launch {
-            showBusy(true, getString(R.string.status_reading_image))
-            try {
-                val softwareBitmap = withContext(Dispatchers.IO) { bitmap.toArgb8888() }
-                currentBitmap?.recycle()
-                currentBitmap = softwareBitmap
-                binding.imageViewPet.setImageBitmap(softwareBitmap)
-                clearResult()
-                classifyCurrentBitmap()
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                Log.e(TAG, "Đọc ảnh thất bại", e)
-                showError(getString(R.string.error_read_image_detail, e.messageOrClass()))
-            } finally {
-                showBusy(false)
-            }
-        }
-    }
+
 
     private suspend fun classifyCurrentBitmap() {
         val bitmap = currentBitmap ?: return
